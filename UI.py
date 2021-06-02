@@ -1,11 +1,11 @@
 import tkinter
 import turtle
 import Arbol
-from random import random
+from random import random, randint
 from tkinter import ttk
 from tkinter.messagebox import showinfo
 
-#_________ INICIALZACION DE TKINTER
+# _________ INICIALZACION DE TKINTER
 ventana = tkinter.Tk()
 ventana.geometry("1000x600")
 ventana.title("Fractal Trees")
@@ -13,24 +13,26 @@ ventana.resizable(False, False)
 ventana.config(bg="lightgreen")
 
 # __________________________ LABELS
-mensajeGeneraciones = tkinter.Label(ventana, text="Selecciona una generacion", bg="lightgreen", font = ("Times New Roman", 16))\
+mensajeGeneraciones = tkinter.Label(ventana, text="Selecciona una generacion", bg="lightgreen",
+                                    font=("Times New Roman", 16)) \
     .place(x=10, y=10)
-mensajeDatos = tkinter.Label(ventana, text="Datos del árbol", font = ("Times New Roman", 16), bg="lightgreen")\
+mensajeDatos = tkinter.Label(ventana, text="Datos del árbol", font=("Times New Roman", 16), bg="lightgreen") \
     .place(x=10, y=280)
-mensajeIndividuo = tkinter.Label(ventana, text="Selecciona al individuo", font = ("Times New Roman", 16), bg="lightgreen")\
+mensajeIndividuo = tkinter.Label(ventana, text="Selecciona al individuo", font=("Times New Roman", 16), bg="lightgreen") \
     .place(x=10, y=160)
 
-datoNumGen = tkinter.Label(ventana, text="Generación: ", font = ("Times New Roman", 14), bg="lightgreen")\
+datoNumGen = tkinter.Label(ventana, text="Generación: ", font=("Times New Roman", 14), bg="lightgreen") \
     .place(x=10, y=310)
-datoPadre = tkinter.Label(ventana, text="Padre: ", font = ("Times New Roman", 14), bg="lightgreen")\
+datoPadre = tkinter.Label(ventana, text="Padre: ", font=("Times New Roman", 14), bg="lightgreen") \
     .place(x=10, y=345)
-datoMadre = tkinter.Label(ventana, text="Madre: ", font = ("Times New Roman", 14), bg="lightgreen")\
+datoMadre = tkinter.Label(ventana, text="Madre: ", font=("Times New Roman", 14), bg="lightgreen") \
     .place(x=10, y=380)
-datoTronco = tkinter.Label(ventana, text="Tronco: ", font = ("Times New Roman", 14), bg="lightgreen")\
+datoTronco = tkinter.Label(ventana, text="Tronco: ", font=("Times New Roman", 14), bg="lightgreen") \
     .place(x=10, y=415)
-datoRangoDecremento = tkinter.Label(ventana, text="Decremento de tamaño: ", font = ("Times New Roman", 14), bg="lightgreen")\
+datoRangoDecremento = tkinter.Label(ventana, text="Decremento de tamaño: ", font=("Times New Roman", 14),
+                                    bg="lightgreen") \
     .place(x=10, y=450)
-datoCantidadRamas = tkinter.Label(ventana, text="Cantidad de ramas: ", font = ("Times New Roman", 14), bg="lightgreen")\
+datoCantidadRamas = tkinter.Label(ventana, text="Cantidad de ramas: ", font=("Times New Roman", 14), bg="lightgreen") \
     .place(x=10, y=485)
 # cantidad de generaciones
 cantidadGeneraciones = []
@@ -68,20 +70,18 @@ canvas.place(x=400, y=0)
 TurtleScreen = turtle.TurtleScreen(canvas)
 TurtleScreen.tracer(0, 0)
 
-#__________ INICIALIZACION DEL LAPIZ
+# __________ INICIALIZACION DEL LAPIZ
 maxTugo = turtle.RawTurtle(TurtleScreen)
 maxTugo.speed(0)
 maxTugo.ht()
 
-#__________________ SE COLOCA ABAJO Y EN EL CENTRO DE LA PANTALLA
+# __________________ SE COLOCA ABAJO Y EN EL CENTRO DE LA PANTALLA
 maxTugo.up()
 maxTugo.left(90)
 maxTugo.backward(HEIGHT * 4 / 9)
 maxTugo.down()
 
-
-
-#_________________ CARNITA
+# _________________ CARNITA
 """
 historial = []
 cantidadgeneraciones
@@ -105,9 +105,8 @@ main {
         
 
 }
-
-
 """
+
 
 def tree(angle, profundidad, grosor, longitud, decremento):
     if profundidad > 0:
@@ -121,9 +120,47 @@ def tree(angle, profundidad, grosor, longitud, decremento):
         maxTugo.backward(longitud)
 
 
-tree(5, 12, 15, 60, 5)
-range(20, 60)
-range(40, 55)
+# tree(30, 12, 15, 80, 5)
+
+def arbol(grosorTronco, longTronco, profundidad, decrementoGrosor, decrementoLong, ramificaciones, angulo, esTronco):
+    if profundidad <= 0:
+        return
+    elif esTronco:
+        maxTugo.pensize(grosorTronco*2)
+        maxTugo.forward(longTronco*4)
+    ramas = randint(ramificaciones[0], ramificaciones[1])
+    #ramas = 1
+    while ramas > 0:
+        anguloreal = randint(angulo[0], angulo[1])
+        direccion = randint(0, 1)
+        if direccion == 1:
+            maxTugo.right(anguloreal)
+        else:
+            maxTugo.left(anguloreal)
+        grueso = grosorTronco
+        if grueso < 0:
+            grueso = 1
+        maxTugo.pensize(grueso)
+        movimiento = (longTronco - randint(decrementoLong[0], decrementoLong[1]))
+        if movimiento < 0:
+            movimiento = 1
+        maxTugo.forward(movimiento)
+        arbol((grosorTronco - randint(decrementoGrosor[0], decrementoGrosor[1])),
+              (longTronco - randint(decrementoLong[0], decrementoLong[1]))
+              , profundidad - 1, decrementoGrosor, decrementoLong, ramificaciones, angulo, False)
+        maxTugo.backward(movimiento)
+        if direccion ==1:
+            maxTugo.left(anguloreal)
+        else:
+            maxTugo.right(anguloreal)
+
+        ramas -= 1
+
+"""maxTugo.up()
+maxTugo.forward(150)
+maxTugo.down()"""
+# arbol(grosorTronco, longTronco, profundidad, decrementoGrosor, decrementoLong, ramificaciones, angulo, esTronco)
+arbol(15, 48, 8, (0, 2), (0, 2), (2, 3), (10, 60), True)
 
 TurtleScreen.update()
 

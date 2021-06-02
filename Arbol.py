@@ -7,17 +7,15 @@ class Arbol:
     grosorTronco = 0
     profundidad = 0
     longitudTronco = 0
-    anchoTronco = 0
-
-    decrementoAncho = ()
+    decrementoGrosor = ()
     decrementoLongitud = ()
     Ramificaciones = ()
     angulo = ()
     generacion = 0
     numIndividuo = 0
     nota = 0
-    def __init__(self, ppadre, pmadre, pgosorTronco, pprofundidad, plongTronco, panchoTronco, pdecAncho, pdeclong, pramificaciones, pangulo, pgeneracion, pnumIndividuo):
-        self.decrementoAncho = pdecAncho
+    def __init__(self, ppadre, pmadre, pgosorTronco, pprofundidad, plongTronco, panchoTronco, pdecrementoGrosor, pdeclong, pramificaciones, pangulo, pgeneracion, pnumIndividuo):
+        self.decrementoGrosor = pdecrementoGrosor
         self.decrementoLongitud = pdeclong
         self.padre = ppadre
         self.numIndividuo = pnumIndividuo
