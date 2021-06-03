@@ -1,9 +1,14 @@
 import tkinter
 import turtle
+
+from PIL import Image, ImageDraw
+
 import Arbol
 from random import random, randint
 from tkinter import ttk
 from tkinter.messagebox import showinfo
+from PIL import EpsImagePlugin
+EpsImagePlugin.gs_windows_binary =  r'C:\Program Files\gs\gs9.54.0\bin\gswin64c'
 
 # _________ INICIALZACION DE TKINTER
 ventana = tkinter.Tk()
@@ -107,61 +112,63 @@ main {
 }
 """
 
-
-def tree(angle, profundidad, grosor, longitud, decremento):
-    if profundidad > 0:
-        maxTugo.pensize(grosor)
-        maxTugo.forward(longitud)
-        maxTugo.left(angle)
-        tree(angle, profundidad - 1, grosor * 4 // 5, longitud - decremento, decremento)
-        maxTugo.right(angle * 2)
-        tree(angle, profundidad - 1, grosor * 4 // 5, longitud - decremento, decremento)
-        maxTugo.left(angle)
-        maxTugo.backward(longitud)
-
-
-# tree(30, 12, 15, 80, 5)
-
 def arbol(grosorTronco, longTronco, profundidad, decrementoGrosor, decrementoLong, ramificaciones, angulo, esTronco):
     if profundidad <= 0:
         return
     elif esTronco:
-        maxTugo.pensize(grosorTronco*2)
-        maxTugo.forward(longTronco*4)
+        maxTugo.pensize(grosorTronco*3//2)
+        maxTugo.forward(longTronco*3//2)
+        arbol((grosorTronco - randint(decrementoGrosor[0], decrementoGrosor[1])),
+              (longTronco - randint(decrementoLong[0], decrementoLong[1]))
+              , profundidad - 1, decrementoGrosor, decrementoLong, ramificaciones, angulo, False)
+        return
+
     ramas = randint(ramificaciones[0], ramificaciones[1])
     #ramas = 1
     while ramas > 0:
         anguloreal = randint(angulo[0], angulo[1])
+
         direccion = randint(0, 1)
         if direccion == 1:
             maxTugo.right(anguloreal)
         else:
             maxTugo.left(anguloreal)
+
         grueso = grosorTronco
         if grueso < 0:
             grueso = 1
         maxTugo.pensize(grueso)
-        movimiento = (longTronco - randint(decrementoLong[0], decrementoLong[1]))
+
+        movimiento = (longTronco)
         if movimiento < 0:
             movimiento = 1
         maxTugo.forward(movimiento)
+
         arbol((grosorTronco - randint(decrementoGrosor[0], decrementoGrosor[1])),
               (longTronco - randint(decrementoLong[0], decrementoLong[1]))
               , profundidad - 1, decrementoGrosor, decrementoLong, ramificaciones, angulo, False)
         maxTugo.backward(movimiento)
-        if direccion ==1:
+        if direccion == 1:
             maxTugo.left(anguloreal)
         else:
             maxTugo.right(anguloreal)
-
         ramas -= 1
 
 """maxTugo.up()
 maxTugo.forward(150)
 maxTugo.down()"""
 # arbol(grosorTronco, longTronco, profundidad, decrementoGrosor, decrementoLong, ramificaciones, angulo, esTronco)
-arbol(15, 48, 8, (0, 2), (0, 2), (2, 3), (10, 60), True)
+arbol(25, 75, 7, (7, 9), (4, 12), (4, 8), (15, 35), True)
 
 TurtleScreen.update()
+
+image1 = Image.new("RGB", (WIDTH, HEIGHT), (255, 255, 255))
+draw = ImageDraw.Draw(image1)
+
+fileName = "imagen-1-1"
+
+TurtleScreen.getcanvas().postscript(file=fileName+".eps")
+img = Image.open(fileName + '.eps')
+img.save(fileName + '.png', 'png')
 
 ventana.mainloop()
