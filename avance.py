@@ -43,6 +43,7 @@ def comparar(silueta, arbol):
     DIVISIONES = 25
     cantidadPixeles = TAMANO // DIVISIONES
     ponderado = 0
+    print(len(arbol))
 
     for i in range(DIVISIONES - 1):
         for j in range(DIVISIONES - 1):
@@ -54,11 +55,11 @@ def comparar(silueta, arbol):
                 if silueta[fila][col] == arbol[fila][col] == 0:
                     nota += 5
                 elif silueta[fila][col] == arbol[fila][col] == 255:
-                    nota += 5
+                    nota += 4
                 elif silueta[fila][col] == 0 and arbol[fila][col] == 255:
                     nota -= 3
                 else:
-                    nota -= 3
+                    nota -= 2
                 fila += 1
                 col += 1
                 contador += 1
@@ -75,18 +76,18 @@ def generarImagen(numGen, numIndividuo):
     fileName = "imagenes\\imagen-" + str(numGen) + "-" + str(numIndividuo)
     gui.TurtleScreen.getcanvas().postscript(file=fileName + ".eps")
     img = Image.open(fileName + '.eps')
-    img.save(fileName + '.png', 'png')
+    img.save(fileName + '.png', lossless=True)
     gui.iniciarPantalla()
 
 
 def poblacionInicial():
     ramificaciones = (3, 6)
-    angle = (15, 60)
-    profundidad = (3, 7)  # 10
-    grosorTronco = (3, 20)
+    angle = (5, 55)
+    profundidad = (3, 6)  # 10
+    grosorTronco = (6, 18)
     longitudTronco = (70, 85)
-    decrementoLongitud = (1, 8)
-    decrementoAncho = (1, 4)
+    decrementoLongitud = (3, 8)
+    decrementoAncho = (1, 5)
     i = 0
     arrayArbol = []
     while i < 10:
@@ -252,19 +253,20 @@ def nuevaGeneracion(generacion, hijos, listaApariciones):
         k += 1
         cont += 1
     gui.matrizGlobal.append(arrayArbol)  # cambiar nombre matriz global
-    gui.totalGeneraciones.append(len(gui.matrizGlobal)+1)
+    gui.totalGeneraciones.append(len(gui.matrizGlobal))
     return arrayArbol
 
 def main():
     print("inicia")
     temp = poblacionInicial()  # se guardan las imagenes de la primera generacion
     # generarImagen(gui.matrizGlobal[-1], )
+    maxGeneraciones = 1
     ponderadoGenActual = 5
     ponderadoGenAnterior = 0
     mayorActual = 0
     indiceMayor = 0
     print("se inicia")
-    while abs(ponderadoGenActual - ponderadoGenAnterior) > 1 and mayorActual < 66:
+    while abs(ponderadoGenActual - ponderadoGenAnterior) > 2 and mayorActual < 66 and len(gui.matrizGlobal) <= maxGeneraciones:
         print("New")
         ponderadoGenAnterior = ponderadoGenActual
         notas = fitness(temp)  # devuelve un array del ponderado de toda la generacion y del individuo con nota mas baja
@@ -278,7 +280,8 @@ def main():
         listaApariciones = seleccion(temp)
         hijos = cruce(temp, listaApariciones)
         hijosFinales = mutacion(hijos)
-        temp = nuevaGeneracion(temp, hijosFinales, listaApariciones)
+        # temp = nuevaGeneracion(temp, hijosFinales, listaApariciones)
+
     print("FINSIH")
     print(indiceMayor)
     print(mayorActual)
@@ -291,6 +294,12 @@ if __name__ == '__main__':
     # _________ INICIALZACION DE TKINTER
     ventanaPrincipal = tkinter.Tk()
     gui = ui.Interfaz(ventanaPrincipal)
-    #main()
-    gui.crearArbol(15, 85, 6, (3, 9), (10, 12), (4, 8), (15, 45), True)
+    main()
+    # grosorTronco, longTronco, profundidad, decrementoGrosor, decrementoLong, ramificaciones, angulo,
+    # esTronco
+    """
+    gui.TurtleScreen.tracer(1, 1)
+    gui.maxTugo.speed(35)
+    gui.crearArbol(17, 80, 7, (2, 6), (2, 15), (3, 6), (15, 50), True)
+    """
     ventanaPrincipal.mainloop()

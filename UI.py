@@ -2,7 +2,10 @@ import tkinter
 import turtle
 from random import randint
 from tkinter import ttk
+from tkinter import messagebox
 from PIL import EpsImagePlugin, Image
+
+from Arbol import Arbol
 from imagenAA import obtenerSilueta, path1, path2
 
 try:
@@ -11,6 +14,8 @@ except:
     # El de Ale
     print("Fallo en el gs")
     # EpsImagePlugin.gs_windows_binary = r'C:\Program Files\gs\gs9.54.0\bin\gswin64c'
+
+
 class Interfaz:
     def __init__(self, ventana):
         self.ventana = ventana
@@ -21,38 +26,74 @@ class Interfaz:
 
         # __________________________ LABELS
         self.mensajeGeneraciones = tkinter.Label(ventana, text="Selecciona una generacion", bg="lightgreen",
-                                            font=("Times New Roman", 16)) \
+                                                 font=("Times New Roman", 16)) \
             .place(x=10, y=10)
-        self.mensajeDatos = tkinter.Label(ventana, text="Datos del árbol", font=("Times New Roman", 16), bg="lightgreen") \
+        self.mensajeDatos = tkinter.Label(ventana, text="Datos del árbol", font=("Times New Roman", 16),
+                                          bg="lightgreen") \
             .place(x=130, y=180)
         self.mensajeIndividuo = tkinter.Label(ventana, text="Selecciona al individuo", font=("Times New Roman", 16),
-                                         bg="lightgreen") \
+                                              bg="lightgreen") \
             .place(x=10, y=90)
 
-        self.datoNumGen = tkinter.Label(ventana, text="Generación: ", font=("Times New Roman", 14), bg="lightgreen") \
+        self.txdatoNumGen = tkinter.StringVar()
+        self.txdatoNumGen.set("Generación: ")
+        self.datoNumGen = tkinter.Label(ventana, textvariable=self.txdatoNumGen, font=("Times New Roman", 14), bg="lightgreen") \
             .place(x=10, y=210)
-        self.datoPadre = tkinter.Label(ventana, text="Padre: ", font=("Times New Roman", 14), bg="lightgreen") \
+
+        self.txdatoPadre = tkinter.StringVar()
+        self.txdatoPadre.set("Padre: ")
+        self.datoPadre = tkinter.Label(ventana, textvariable=self.txdatoPadre, font=("Times New Roman", 14), bg="lightgreen") \
             .place(x=10, y=245)
-        self.datoMadre = tkinter.Label(ventana, text="Madre: ", font=("Times New Roman", 14), bg="lightgreen") \
+
+        self.txdatoMadre = tkinter.StringVar()
+        self.txdatoMadre.set("Madre: ")
+        self.datoMadre = tkinter.Label(ventana, textvariable=self.txdatoMadre, font=("Times New Roman", 14), bg="lightgreen") \
             .place(x=10, y=280)
-        self.datoTronco = tkinter.Label(ventana, text="Longitud inicial: ", font=("Times New Roman", 14), bg="lightgreen") \
+
+        self.txdatoTroncoL = tkinter.StringVar()
+        self.txdatoTroncoL.set("Longitud inicial: ")
+        self.datoTroncoL = tkinter.Label(ventana, textvariable=self.txdatoTroncoL, font=("Times New Roman", 14),
+                                        bg="lightgreen") \
             .place(x=10, y=315)
-        self.datoTronco = tkinter.Label(ventana, text="Grosor inicial: ", font=("Times New Roman", 14), bg="lightgreen") \
+
+        self.txdatoTroncoG = tkinter.StringVar()
+        self.txdatoTroncoG.set("Grosor inicial: ")
+        self.datoTroncoG = tkinter.Label(ventana, textvariable=self.txdatoTroncoG, font=("Times New Roman", 14), bg="lightgreen") \
             .place(x=10, y=345)
-        self.datoDecLong = tkinter.Label(ventana, text="Decremento de longitud: ", font=("Times New Roman", 14),
-                                    bg="lightgreen") \
+
+        self.txdatoDecLong = tkinter.StringVar()
+        self.txdatoDecLong.set("Decremento de longitud: ")
+        self.datoDecLong = tkinter.Label(ventana, textvariable=self.txdatoDecLong, font=("Times New Roman", 14),
+                                         bg="lightgreen") \
             .place(x=10, y=380)
-        self.datoCantidadRamas = tkinter.Label(ventana, text="Cantidad de ramas: ", font=("Times New Roman", 14),
-                                          bg="lightgreen") \
+
+        self.txdatoCantidadRamas = tkinter.StringVar()
+        self.txdatoCantidadRamas.set("Cantidad de ramas: ")
+        self.datoCantidadRamas = tkinter.Label(ventana, textvariable=self.txdatoCantidadRamas, font=("Times New Roman", 14),
+                                               bg="lightgreen") \
             .place(x=10, y=415)
-        self.datoProfundidad = tkinter.Label(ventana, text="Profundidad: ", font=("Times New Roman", 14), bg="lightgreen") \
+
+        self.txdatoProfundidad = tkinter.StringVar()
+        self.txdatoProfundidad.set("Profundidad: ")
+        self.datoProfundidad = tkinter.Label(ventana, textvariable=self.txdatoProfundidad, font=("Times New Roman", 14),
+                                             bg="lightgreen") \
             .place(x=10, y=445)
-        self.datoDecAncho = tkinter.Label(ventana, text="Decremento de ancho: ", font=("Times New Roman", 14),
-                                     bg="lightgreen") \
+
+        self.txdatoDecAncho = tkinter.StringVar()
+        self.txdatoDecAncho.set("Decremento de ancho: ")
+        self.datoDecAncho = tkinter.Label(ventana, textvariable=self.txdatoDecAncho, font=("Times New Roman", 14),
+                                          bg="lightgreen") \
             .place(x=10, y=480)
-        self.datoAngulo = tkinter.Label(ventana, text="Rango de ángulos: ", font=("Times New Roman", 14), bg="lightgreen") \
+
+        self.txdatoAngulo = tkinter.StringVar()
+        self.txdatoAngulo.set("Rango de ángulos: ")
+        self.datoAngulo = tkinter.Label(ventana, textvariable=self.txdatoAngulo, font=("Times New Roman", 14),
+                                        bg="lightgreen") \
             .place(x=10, y=515)
-        self.datoNota = tkinter.Label(ventana, text="Nota obtenida: ", font=("Times New Roman", 14), bg="lightgreen") \
+
+        self.txdatoNota = tkinter.StringVar()
+        self.txdatoNota.set("Nota obtenida: ")
+        self.datoNota = tkinter.Label(ventana, textvariable=self.txdatoNota, font=("Times New Roman", 14), bg="lightgreen") \
             .place(x=10, y=545)
 
         # ?____________________ cantidad de generaciones y PATHs de las siluetas cargadas
@@ -80,6 +121,11 @@ class Interfaz:
         self.hijos['state'] = 'readonly'
         self.hijos.place(x=10, y=120)
 
+        # _____________ BOTON MANIPULACION COMBOBOX
+        self.verinfoBT = tkinter.Button(ventana, command=self.darinfo, width=10, font=("Times New Roman", 14),
+                                        bg="lightgreen", relief=tkinter.RAISED,
+                                        text="Consultar").place(x=250, y=10)
+
         # ______________ TURTLE DRAWING
         self.HEIGHT = 600
         self.WIDTH = 600
@@ -102,6 +148,7 @@ class Interfaz:
         self.maxTugo.goto(-0.00, -266.00)
         self.maxTugo.down()
 
+        self.ventana.update_idletasks()
 
     def actualizarGeneraciones(self):
         self.generaciones['values'] = self.totalGeneraciones
@@ -116,26 +163,27 @@ class Interfaz:
         self.maxTugo.goto(-0.00, -266.00)
         self.maxTugo.down()
 
-    def validarDatos(self, grosorTronco, longTronco, profundidad, decrementoGrosor, decrementoLong, ramificaciones, angulo,
-                   esTronco):
+    def validarDatos(self, grosorTronco, longTronco, profundidad, decrementoGrosor, decrementoLong, ramificaciones,
+                     angulo,
+                     esTronco):
         decrementoGrosor = sorted(decrementoGrosor)
         decrementoLong = sorted(decrementoLong)
 
         ramificaciones = sorted(ramificaciones)
-        angulo= sorted(angulo)
+        angulo = sorted(angulo)
 
-        if grosorTronco>20:
+        if grosorTronco > 20:
             grosorTronco = 20
-        elif grosorTronco<3:
+        elif grosorTronco < 3:
             grosorTronco = 3
-        if longTronco>85:
+        if longTronco > 85:
             longTronco = 85
-        elif longTronco<70:
+        elif longTronco < 70:
             longTronco = 70
-        if profundidad>7:
-            profundidad=7
-        elif profundidad<3:
-            profundidad=3
+        if profundidad > 7:
+            profundidad = 7
+        elif profundidad < 3:
+            profundidad = 3
         if decrementoGrosor[0] < 1:
             decrementoGrosor[0] = 1
         elif decrementoGrosor[0] > 4:
@@ -169,19 +217,92 @@ class Interfaz:
         elif angulo[1] > 60:
             angulo[1] = 60
         self.crearArbol(grosorTronco, longTronco, profundidad, decrementoGrosor, decrementoLong, ramificaciones, angulo,
-                   esTronco)
+                        esTronco)
 
-    def crearArbol(self, grosorTronco, longTronco, profundidad, decrementoGrosor, decrementoLong, ramificaciones, angulo,
+    def validarValores(self):
+        gen = self.generaciones.get()
+        num = self.hijos.get()
+        if gen == "":
+            gen = -1
+        if num == "":
+            num = -1
+        return gen, num
+
+    def colocarInfo(self, gen, num):
+        arbol: Arbol = self.matrizGlobal[int(gen)-1][int(num)-1]
+        self.txdatoNumGen.set("Generación: "+str(arbol.generacion))
+        self.txdatoPadre.set("Padre: "+str(arbol.padre))
+        self.txdatoMadre.set("Madre: "+str(arbol.madre))
+        self.txdatoTroncoL.set("Longitud inicial: "+str(arbol.longitudTronco))
+        self.txdatoTroncoG.set("Grosor inicial: "+str(arbol.grosorTronco))
+        self.txdatoDecLong.set("Decremento de longitud: "+str(arbol.decrementoLongitud))
+        self.txdatoCantidadRamas.set("Cantidad de ramas: "+str(arbol.ramificaciones))
+        self.txdatoProfundidad.set("Profundidad: "+str(arbol.profundidad))
+        self.txdatoDecAncho.set("Decremento de ancho: "+str(arbol.decrementoGrosor))
+        self.txdatoAngulo.set("Rango de ángulos: "+str(arbol.angulo))
+        self.txdatoNota.set("Nota obtenida: "+str(arbol.nota))
+
+    def darinfo(self):
+        generacion, numero = self.validarValores()
+
+        if generacion == -1:
+            messagebox.showinfo("Error", "Debe seleccionar tanto la generación como el individuo para ver su información")
+            return
+        filename = "imagenes\\imagen-"+generacion+"-"+numero+".png"
+        self.TurtleScreen.bgpic(filename)
+        self.colocarInfo(generacion, numero)
+        self.ventana.update_idletasks()
+        """
+        try:
+            self.TurtleScreen.bgpic(filename)
+            self.colocarInfo(generacion, numero)
+            self.ventana.update_idletasks()
+        except:
+            messagebox.showinfo("Error", "No se encontró el archivo")
+            """
+
+        return
+
+    def crearArbol(self, grosorTronco, longTronco, profundidad, decrementoGrosor, decrementoLong, ramificaciones,
+                   angulo,
                    esTronco):
         if profundidad <= 0:
             return
         elif esTronco:
-            self.maxTugo.pensize(grosorTronco * 8 // 3)
-            self.maxTugo.forward(longTronco * 4 // 3)
+            self.maxTugo.pensize(grosorTronco * 3)
+            self.maxTugo.forward(longTronco * 2)
+            """
             self.crearArbol((grosorTronco - randint(decrementoGrosor[0], decrementoGrosor[1])),
                        (longTronco - randint(decrementoLong[0], decrementoLong[1]))
                        , profundidad - 1, decrementoGrosor, decrementoLong, ramificaciones, angulo, False)
             return
+            """
+            anguloreal = randint(0, 8)
+
+            direccion = randint(0, 1)
+            if direccion == 1:
+                self.maxTugo.right(anguloreal)
+            else:
+                self.maxTugo.left(anguloreal)
+
+            grueso = grosorTronco
+            if grueso < 0:
+                grueso = 1
+            self.maxTugo.pensize(grueso)
+
+            movimiento = (longTronco * 2 // 3)
+            if movimiento < 0:
+                movimiento = 1
+            self.maxTugo.forward(movimiento)
+            ramificacion = (ramificaciones[0] // 2, ramificaciones[1] // 2)
+            self.crearArbol((grosorTronco - randint(decrementoGrosor[0], decrementoGrosor[1])),
+                            (longTronco - randint(decrementoLong[0], decrementoLong[1]) * 2)
+                            , profundidad // 2, decrementoGrosor, decrementoLong, ramificacion, angulo, False)
+            self.maxTugo.backward(movimiento)
+            if direccion == 1:
+                self.maxTugo.left(anguloreal)
+            else:
+                self.maxTugo.right(anguloreal)
 
         ramas = randint(ramificaciones[0], ramificaciones[1])
         while ramas > 0:
@@ -204,8 +325,8 @@ class Interfaz:
             self.maxTugo.forward(movimiento)
 
             self.crearArbol((grosorTronco - randint(decrementoGrosor[0], decrementoGrosor[1])),
-                       (longTronco - randint(decrementoLong[0], decrementoLong[1]))
-                       , profundidad - 1, decrementoGrosor, decrementoLong, ramificaciones, angulo, False)
+                            (longTronco - randint(decrementoLong[0], decrementoLong[1]))
+                            , profundidad - 1, decrementoGrosor, decrementoLong, ramificaciones, angulo, False)
             self.maxTugo.backward(movimiento)
             if direccion == 1:
                 self.maxTugo.left(anguloreal)
@@ -213,11 +334,11 @@ class Interfaz:
                 self.maxTugo.right(anguloreal)
             ramas -= 1
 
+
 # TurtleScreen.update()
 
 
-
-#arbol(25, 95, 7, (3, 9), (10, 12), (2, 4), (0, 45), True)
+# arbol(25, 95, 7, (3, 9), (10, 12), (2, 4), (0, 45), True)
 
 """
 maxTugo.up()
@@ -273,7 +394,7 @@ fileName = "imagenes\\siluetaNueva1"
 #TurtleScreen.getcanvas().postscript(file=fileName + ".eps")
 
 #img = Image.open(fileName + '.eps')
-path3 = "C:\\I Semestre 2021\\AA\\Fractales_Proyecto2\\Siluetas\\silueta1.jpg"
+path3 = "C:\\I Semestre 2021\\AA\\Fractales_Proyecto2\\Siluetas\\silueta1.png"
 img = Image.open(path3).convert("1")  # convert image to 8-bit grayscale
 img = img.resize((600, 600))
 
@@ -282,4 +403,3 @@ img.save(fileName + '.png', 'png')
 # avance.generarImagen()
 # image1 = Image.new("RGB", (WIDTH, HEIGHT), (255, 255, 255))
 # draw = ImageDraw.Draw(image1)
-

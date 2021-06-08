@@ -1,6 +1,6 @@
 from PIL import Image
 path1 = "Siluetas\\silueta1.jpg"
-path2 = "Siluetas\\silueta3.jpg"
+path2 = "Siluetas\\silueta2.jpg"
 pathFitness = "imagenes\\imagen-"
 
 def obtenerSilueta(path):
