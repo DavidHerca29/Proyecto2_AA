@@ -172,32 +172,32 @@ class Interfaz:
         ramificaciones = sorted(ramificaciones)
         angulo = sorted(angulo)
 
-        if grosorTronco > 20:
-            grosorTronco = 20
-        elif grosorTronco < 3:
-            grosorTronco = 3
+        if grosorTronco > 18:
+            grosorTronco = 18
+        elif grosorTronco < 6:
+            grosorTronco = 6
         if longTronco > 85:
             longTronco = 85
-        elif longTronco < 70:
-            longTronco = 70
-        if profundidad > 7:
-            profundidad = 7
+        elif longTronco < 60:
+            longTronco = 60
+        if profundidad > 6:
+            profundidad = 6
         elif profundidad < 3:
             profundidad = 3
         if decrementoGrosor[0] < 1:
             decrementoGrosor[0] = 1
-        elif decrementoGrosor[0] > 4:
-            decrementoGrosor[0] = 4
+        elif decrementoGrosor[0] > 5:
+            decrementoGrosor[0] = 5
         if decrementoGrosor[1] < 1:
             decrementoGrosor[1] = 1
-        elif decrementoGrosor[1] > 4:
-            decrementoGrosor[1] = 4
-        if decrementoLong[0] < 1:
-            decrementoLong[0] = 1
+        elif decrementoGrosor[1] > 5:
+            decrementoGrosor[1] = 5
+        if decrementoLong[0] < 3:
+            decrementoLong[0] = 3
         elif decrementoLong[0] > 8:
             decrementoLong[0] = 8
-        if decrementoLong[1] < 1:
-            decrementoLong[1] = 1
+        if decrementoLong[1] < 3:
+            decrementoLong[1] = 3
         elif decrementoLong[1] > 8:
             decrementoLong[1] = 8
         if ramificaciones[0] < 3:
@@ -208,12 +208,12 @@ class Interfaz:
             ramificaciones[1] = 3
         elif ramificaciones[1] > 6:
             ramificaciones[1] = 6
-        if angulo[0] < 15:
-            angulo[0] = 15
+        if angulo[0] < 5:
+            angulo[0] = 5
         elif angulo[0] > 60:
             angulo[0] = 60
-        if angulo[1] < 15:
-            angulo[1] = 15
+        if angulo[1] < 5:
+            angulo[1] = 5
         elif angulo[1] > 60:
             angulo[1] = 60
         self.crearArbol(grosorTronco, longTronco, profundidad, decrementoGrosor, decrementoLong, ramificaciones, angulo,
@@ -231,8 +231,8 @@ class Interfaz:
     def colocarInfo(self, gen, num):
         arbol: Arbol = self.matrizGlobal[int(gen)-1][int(num)-1]
         self.txdatoNumGen.set("Generación: "+str(arbol.generacion))
-        self.txdatoPadre.set("Padre: "+str(arbol.padre))
-        self.txdatoMadre.set("Madre: "+str(arbol.madre))
+        self.txdatoPadre.set("Padre: "+str(arbol.padre.numIndividuo))
+        self.txdatoMadre.set("Madre: "+str(arbol.madre.numIndividuo))
         self.txdatoTroncoL.set("Longitud inicial: "+str(arbol.longitudTronco))
         self.txdatoTroncoG.set("Grosor inicial: "+str(arbol.grosorTronco))
         self.txdatoDecLong.set("Decremento de longitud: "+str(arbol.decrementoLongitud))
@@ -340,66 +340,7 @@ class Interfaz:
 
 # arbol(25, 95, 7, (3, 9), (10, 12), (2, 4), (0, 45), True)
 
-"""
-maxTugo.up()
-maxTugo.forward(150)
-maxTugo.down()
-"""
-"""
-# arbol(grosorTronco, longTronco, profundidad, decrementoGrosor, decrementoLong, ramificaciones, angulo, esTronco)
-#arbol(25, 95, 7, (3, 9), (10, 12), (4, 8), (0, 45), True)
-def comparar(silueta, arbol):
-    TAMANO = len(silueta)
-    DIVISIONES = 25
-    cantidadPixeles = TAMANO//DIVISIONES
-    ponderado = 0
 
-    for i in range(DIVISIONES-1):
-        for j in range(DIVISIONES-1):
-            fila = DIVISIONES * i
-            col = DIVISIONES * j
-            contador = 0
-            nota = 0
-            while contador <= cantidadPixeles:
-                if silueta[fila][col] == arbol[fila][col] == 0:
-                    nota += 5
-                elif silueta[fila][col] == arbol[fila][col] == 255:
-                    nota += 5
-                elif silueta[fila][col] == 0 and arbol[fila][col] == 255:
-                    nota -= 2
-                else:
-                    nota -= 2
-                fila += 1
-                col += 1
-                contador += 1
-            print(nota)
-            nota *= 100
-            nota /= 2880
-            ponderado += nota
-
-    ponderado /= DIVISIONES
-    return ponderado
-"""
-"""
-fileName = "imagenes\\imagen-1-1.png"
-data = imagenAA.obtenerSilueta(fileName)
-print(comparar(silueta2, data))
-"""
-"""
-for row in data:
-    print(' '.join('{:3}'.format(value) for value in row))
-"""
-"""
-fileName = "imagenes\\siluetaNueva1"
-#TurtleScreen.getcanvas().postscript(file=fileName + ".eps")
-
-#img = Image.open(fileName + '.eps')
-path3 = "C:\\I Semestre 2021\\AA\\Fractales_Proyecto2\\Siluetas\\silueta1.png"
-img = Image.open(path3).convert("1")  # convert image to 8-bit grayscale
-img = img.resize((600, 600))
-
-img.save(fileName + '.png', 'png')
-"""
 # avance.generarImagen()
 # image1 = Image.new("RGB", (WIDTH, HEIGHT), (255, 255, 255))
 # draw = ImageDraw.Draw(image1)

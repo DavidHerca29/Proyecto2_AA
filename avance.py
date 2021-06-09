@@ -55,12 +55,15 @@ def comparar(silueta, arbol):
                 if silueta[fila][col] == arbol[fila][col] == 0:
                     nota += 5
                 elif silueta[fila][col] == arbol[fila][col] == 255:
-                    nota += 4
+                    nota += 5
                 elif silueta[fila][col] == 0 and arbol[fila][col] == 255:
                     nota -= 3
                 else:
                     nota -= 2
                 fila += 1
+                """"
+                25 = 24x24 = 458 * 5 = 2880
+                """
                 col += 1
                 contador += 1
             #print(nota)
@@ -82,10 +85,10 @@ def generarImagen(numGen, numIndividuo):
 
 def poblacionInicial():
     ramificaciones = (3, 6)
-    angle = (5, 55)
+    angle = (5, 60)
     profundidad = (3, 6)  # 10
     grosorTronco = (6, 18)
-    longitudTronco = (70, 85)
+    longitudTronco = (60, 85)
     decrementoLongitud = (3, 8)
     decrementoAncho = (1, 5)
     i = 0
@@ -258,16 +261,19 @@ def nuevaGeneracion(generacion, hijos, listaApariciones):
 
 def main():
     print("inicia")
-    temp = poblacionInicial()  # se guardan las imagenes de la primera generacion
     # generarImagen(gui.matrizGlobal[-1], )
-    maxGeneraciones = 1
+    maxGeneraciones = 6
     ponderadoGenActual = 5
     ponderadoGenAnterior = 0
     mayorActual = 0
     indiceMayor = 0
     print("se inicia")
-    while abs(ponderadoGenActual - ponderadoGenAnterior) > 2 and mayorActual < 66 and len(gui.matrizGlobal) <= maxGeneraciones:
+    while abs(ponderadoGenActual - ponderadoGenAnterior) > 1 and mayorActual < 66 and len(gui.matrizGlobal) <= maxGeneraciones:
         print("New")
+        if len(gui.matrizGlobal) == 0:
+            temp =  poblacionInicial()  # se guardan las imagenes de la primera generacion
+        else:
+            temp = nuevaGeneracion(temp, hijosFinales, listaApariciones)
         ponderadoGenAnterior = ponderadoGenActual
         notas = fitness(temp)  # devuelve un array del ponderado de toda la generacion y del individuo con nota mas baja
         ponderadoGenActual = notas[0]
@@ -280,7 +286,7 @@ def main():
         listaApariciones = seleccion(temp)
         hijos = cruce(temp, listaApariciones)
         hijosFinales = mutacion(hijos)
-        # temp = nuevaGeneracion(temp, hijosFinales, listaApariciones)
+
 
     print("FINSIH")
     print(indiceMayor)
