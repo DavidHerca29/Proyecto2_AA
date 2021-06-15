@@ -266,7 +266,7 @@ def main():
     mayorActual = 0
     indiceMayor = 0
     print("se inicia")
-    while abs(ponderadoGenActual - ponderadoGenAnterior) > 0.5 and mayorActual < 66 and len(gui.matrizGlobal) <= maxGeneraciones:
+    while mayorActual < 72 and len(gui.matrizGlobal) <= maxGeneraciones:
         print("New")
         if len(gui.matrizGlobal) == 0:
             temp =  poblacionInicial()  # se guardan las imagenes de la primera generacion
