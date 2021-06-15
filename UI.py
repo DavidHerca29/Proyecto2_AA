@@ -96,6 +96,12 @@ class Interfaz:
         self.datoNota = tkinter.Label(ventana, textvariable=self.txdatoNota, font=("Times New Roman", 14), bg="lightgreen") \
             .place(x=10, y=545)
 
+        self.txmejorInd = tkinter.StringVar()
+        self.txmejorInd.set("Mejor individuo: ")
+        self.mejorInd = tkinter.Label(ventana, textvariable=self.txmejorInd, font=("Times New Roman", 10),
+                                      bg="lightgreen") \
+            .place(x=10, y=150)
+
         # ?____________________ cantidad de generaciones y PATHs de las siluetas cargadas
 
         self.matrizGlobal = []
@@ -148,11 +154,13 @@ class Interfaz:
 
         self.ventana.update_idletasks()
 
-    def actualizarGeneraciones(self, cantidadHijos):
+    def actualizarGeneraciones(self, cantidadHijos, generacionM, numIndividuo, notaM):
         self.generaciones['values'] = self.totalGeneraciones
         for i in range(1, cantidadHijos+1):
             self.hijosPorGeneracion.append(str(i))
         self.hijos['values']=self.hijosPorGeneracion
+        self.txmejorInd.set("Mejor Individuo "+str(generacionM)+"-"+str(numIndividuo)+" con nota: "+str(notaM))
+        self.ventana.update_idletasks()
 
     def iniciarPantalla(self):
         self.TurtleScreen.clear()
@@ -249,7 +257,7 @@ class Interfaz:
     def darinfo(self):
         generacion, numero = self.validarValores()
 
-        if generacion == -1:
+        if generacion == -1 or numero == -1:
             messagebox.showinfo("Error", "Debe seleccionar tanto la generación como el individuo para ver su información")
             return
         filename = "imagenes\\imagen-"+generacion+"-"+numero+".png"

@@ -260,16 +260,18 @@ def nuevaGeneracion(generacion, hijos, listaApariciones):
 def main():
     print("inicia")
     # generarImagen(gui.matrizGlobal[-1], )
-    maxGeneraciones = 16
+    maxGeneraciones = 35
     ponderadoGenActual = 5
     ponderadoGenAnterior = 0
     mayorActual = 0
     indiceMayor = 0
-    print("se inicia")
-    while mayorActual < 72 and len(gui.matrizGlobal) <= maxGeneraciones:
+    indiceMejor = 0
+    mejorNota = 0
+    generacionM = 0
+    while mayorActual < 72 and len(gui.matrizGlobal) < maxGeneraciones:
         print("New")
         if len(gui.matrizGlobal) == 0:
-            temp =  poblacionInicial()  # se guardan las imagenes de la primera generacion
+            temp = poblacionInicial()  # se guardan las imagenes de la primera generacion
         else:
             temp = nuevaGeneracion(temp, hijosFinales, listaApariciones)
         ponderadoGenAnterior = ponderadoGenActual
@@ -277,6 +279,10 @@ def main():
         ponderadoGenActual = notas[0]
         mayorActual = notas[1]
         indiceMayor = notas[2]
+        if mayorActual > mejorNota:
+            mejorNota = mayorActual
+            indiceMejor = indiceMayor
+            generacionM = len(gui.matrizGlobal)
         print(indiceMayor)
         print(mayorActual)
         listaApariciones = seleccion(temp)
@@ -287,9 +293,7 @@ def main():
     print("FINSIH")
     print(indiceMayor)
     print(mayorActual)
-    print(ponderadoGenAnterior)
-    print(ponderadoGenActual)
-    gui.actualizarGeneraciones(len(gui.matrizGlobal[0]))
+    gui.actualizarGeneraciones(len(gui.matrizGlobal[0]), generacionM, indiceMejor, mejorNota)
 
 
 if __name__ == '__main__':
