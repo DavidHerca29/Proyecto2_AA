@@ -43,7 +43,6 @@ def comparar(silueta, arbol):
     DIVISIONES = 25
     cantidadPixeles = TAMANO // DIVISIONES
     ponderado = 0
-    print(len(arbol))
 
     for i in range(DIVISIONES - 1):
         for j in range(DIVISIONES - 1):
@@ -66,7 +65,6 @@ def comparar(silueta, arbol):
                 """
                 col += 1
                 contador += 1
-            #print(nota)
             nota *= 100
             nota /= 2880
             ponderado += nota
@@ -93,7 +91,8 @@ def poblacionInicial():
     decrementoAncho = (1, 5)
     i = 0
     arrayArbol = []
-    while i < 10:
+    HIJOSPORGENERACION = 20
+    while i < HIJOSPORGENERACION:
         madre = 0
         padre = 0
         pgrosorTronco = randint(grosorTronco[0], grosorTronco[1])
@@ -164,16 +163,16 @@ def seleccion(aG):  # arraygeneracion):
     normalizado = [round((float(i) / sum(valores) * 100)) for i in valores]
 
     suma = 0
-    for i in range(10):
+    for i in range(len(aG)):
         temp = normalizado[i]
         normalizado[i] = normalizado[i]+suma
         suma += temp
 
     lista = range(0, 100)
-    listaRandom = sample(lista, k=10)
+    listaRandom = sample(lista, k=len(aG))
     listaApariciones = []
     for i in listaRandom:
-        for j in range(10):
+        for j in range(len(aG)):
             if j == 0:
                 if i <= normalizado[0]:
                     listaApariciones.append(j)
@@ -189,7 +188,7 @@ def cruce(aG, listaApariciones):
     sacarCromosomas(aG, listaApariciones)
     hijos = []
     i = 0
-    while i < 10:
+    while i < len(listaApariciones): # PUEDE ser len(listaApariciones)
         primerInd = aG[listaApariciones[i]].cromosomas
         segundoInd = aG[listaApariciones[i + 1]].cromosomas
         nuevosHijos = sacarHijos(primerInd, segundoInd)
@@ -207,7 +206,6 @@ def mutacion(hijos):
         matriz = []
         for i in hijos:
             matriz.append(list(i))
-        print(matriz)
         i=0
         while i < indiceMutacion:
             x = randint(0, 9)
@@ -262,13 +260,13 @@ def nuevaGeneracion(generacion, hijos, listaApariciones):
 def main():
     print("inicia")
     # generarImagen(gui.matrizGlobal[-1], )
-    maxGeneraciones = 6
+    maxGeneraciones = 16
     ponderadoGenActual = 5
     ponderadoGenAnterior = 0
     mayorActual = 0
     indiceMayor = 0
     print("se inicia")
-    while abs(ponderadoGenActual - ponderadoGenAnterior) > 1 and mayorActual < 66 and len(gui.matrizGlobal) <= maxGeneraciones:
+    while abs(ponderadoGenActual - ponderadoGenAnterior) > 0.5 and mayorActual < 66 and len(gui.matrizGlobal) <= maxGeneraciones:
         print("New")
         if len(gui.matrizGlobal) == 0:
             temp =  poblacionInicial()  # se guardan las imagenes de la primera generacion
@@ -281,8 +279,6 @@ def main():
         indiceMayor = notas[2]
         print(indiceMayor)
         print(mayorActual)
-        print(ponderadoGenAnterior)
-        print(ponderadoGenActual)
         listaApariciones = seleccion(temp)
         hijos = cruce(temp, listaApariciones)
         hijosFinales = mutacion(hijos)
@@ -293,7 +289,7 @@ def main():
     print(mayorActual)
     print(ponderadoGenAnterior)
     print(ponderadoGenActual)
-    gui.actualizarGeneraciones()
+    gui.actualizarGeneraciones(len(gui.matrizGlobal[0]))
 
 
 if __name__ == '__main__':

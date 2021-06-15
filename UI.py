@@ -101,8 +101,6 @@ class Interfaz:
         self.matrizGlobal = []
         self.totalGeneraciones = []
         self.hijosPorGeneracion = []
-        for i in range(1, 11):
-            self.hijosPorGeneracion.append(str(i))
 
         self.silueta1 = obtenerSilueta(path1)
         self.silueta2 = obtenerSilueta(path2)
@@ -150,8 +148,11 @@ class Interfaz:
 
         self.ventana.update_idletasks()
 
-    def actualizarGeneraciones(self):
+    def actualizarGeneraciones(self, cantidadHijos):
         self.generaciones['values'] = self.totalGeneraciones
+        for i in range(1, cantidadHijos+1):
+            self.hijosPorGeneracion.append(str(i))
+        self.hijos['values']=self.hijosPorGeneracion
 
     def iniciarPantalla(self):
         self.TurtleScreen.clear()
@@ -168,7 +169,6 @@ class Interfaz:
                      esTronco):
         decrementoGrosor = sorted(decrementoGrosor)
         decrementoLong = sorted(decrementoLong)
-
         ramificaciones = sorted(ramificaciones)
         angulo = sorted(angulo)
 
@@ -231,8 +231,12 @@ class Interfaz:
     def colocarInfo(self, gen, num):
         arbol: Arbol = self.matrizGlobal[int(gen)-1][int(num)-1]
         self.txdatoNumGen.set("Generación: "+str(arbol.generacion))
-        self.txdatoPadre.set("Padre: "+str(arbol.padre.numIndividuo))
-        self.txdatoMadre.set("Madre: "+str(arbol.madre.numIndividuo))
+        try:
+            self.txdatoPadre.set("Padre: "+str(arbol.padre.numIndividuo))
+            self.txdatoMadre.set("Madre: "+str(arbol.madre.numIndividuo))
+        except:
+            self.txdatoPadre.set("Padre: " + str(arbol.padre))
+            self.txdatoMadre.set("Madre: " + str(arbol.madre))
         self.txdatoTroncoL.set("Longitud inicial: "+str(arbol.longitudTronco))
         self.txdatoTroncoG.set("Grosor inicial: "+str(arbol.grosorTronco))
         self.txdatoDecLong.set("Decremento de longitud: "+str(arbol.decrementoLongitud))
